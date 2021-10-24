@@ -15,6 +15,8 @@ asking = False
 info = True
 text = None
 wewinthese = False
+name = None
+ans = None
 def callback():
     #---------chatbot---------------
     global canvas
@@ -22,32 +24,50 @@ def callback():
     global info
     global text
     global wewinthese
+    global name
+    global ans
+    if wewinthese == True:
+        if "no" in entry1.get().lower() or "nah" in entry1.get().lower():
+            
+            canvas.itemconfig(text, text="Okay. We will be putting your orders in the csv file so the chef can see and make them.\nHave a great meal!")
+            print("finished lol")
+        else:
+            wewinthese = False
     if info == True:
         ans = chatbot.get_answer(entry1.get())
         canvas.itemconfig(text, text=random.choice(greetings))
         info = False
+        name = entry1.get()
         entry1.delete(0,END)
         entry1.insert(0,"")
+        
         return None
-    if asking == False:
+    if asking == False and wewinthese == False:
         ans = chatbot.get_answer(entry1.get())
         if ans == None:
-                tips = ["Did you try checking out the other window? There is a menu in that window","Did you try correctly naming your order?","Were you making small talk? Ah, I'm a bot.. so.."]
-                canvas.itemconfig(text, text="We can't find that order in our menu. "+random.choice(tips))
+            tips = ["Did you try checking out the other window? There is a menu in that window","Did you try correctly naming your order?","Were you making small talk? Ah, I'm a bot.. so.."]
+            canvas.itemconfig(text, text="We can't find that order in our menu. "+random.choice(tips))
+            return None
         if ans[1] == 0:
             canvas.itemconfig(text, text="Do you want an order of "+ans[0][0]+" for $"+str(ans[0][1])+"?")
             asking = True
             entry1.delete(0,END)
             entry1.insert(0,"")
         elif ans[1] == 1:
-            canvas.itemconfig(text, text=ans[0][0])
+            canvas.itemconfig(text, text=ans[0])
+            entry1.delete(0,END)
+            entry1.insert(0,"")
     elif asking == True:
         if "ye" in entry1.get().lower():
             canvas.itemconfig(text, text="Noted. Do you want anything else?")
+            storeorder.storeorder([name,ans[0][0]])
+            entry1.delete(0,END)
+            entry1.insert(0,"")
+            wewinthese = True
         elif "no" in entry1.get().lower() or "nah" in entry1.get().lower():
-            
-        else:
             canvas.itemconfig(text, text="Oh okay. If i'm not able to get which order you want, you can try specifying it better.\nNext order please")
+            entry1.delete(0,END)
+            entry1.insert(0,"")
         asking = False
         entry1.delete(0,END)
         entry1.insert(0,"")
@@ -86,6 +106,6 @@ canvas2.pack()
 canvas.create_image(775, 450, image=bg)
 button = Button(text="Submit", width=20, command=callback, style='W.TButton')
 canvas.create_window(775,600,window=button)
-text = canvas.create_text(775, 300, text="May I know your name and phone number before you order?", fill="black", font=('courier', 15, 'bold'))
+text = canvas.create_text(775, 300, text="May I know your name before you order?", fill="black", font=('courier', 15, 'bold'))
 canvas.pack()
 
