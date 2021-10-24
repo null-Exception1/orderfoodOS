@@ -27,7 +27,8 @@ def get_answer(input_):
                 ["good","Thank you!"],
                 ["who you","Max"],
                 ["name","Max"],
-                ["cost","The prices are written in the menu and are also confirmed when you order the dish"]]
+                ["cost","The prices are written in the menu and are also confirmed when you order the dish"],
+                ["beverages","We offer soda, juice, iced tea, coffee(cold/hot), milk, hot chocolate."]]
     
     input_ = input_.lower()
     
@@ -72,4 +73,3 @@ def get_answer(input_):
                
              
     
-
